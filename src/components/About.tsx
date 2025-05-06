@@ -15,12 +15,14 @@ const About: React.FC = () => {
               En <span className="font-semibold">ADECAM TRIGUEROS</span>, somos más que una academia de artes marciales. Somos una familia dedicada a cultivar el crecimiento personal y deportivo a través de la disciplina y el respeto.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
-              Desde nuestra fundación, nos hemos comprometido a ofrecer entrenamiento de alta calidad en Kick Boxing y Jiujitsu Brasileño, adaptado a todos los niveles y edades.
+              La <span className="font-semibold">ASOCIACIÓN CULTURAL DE DEPORTES DE CONTACTO Y ARTES MARCIALES TRIGUEROS</span> es un referente en la promoción y enseñanza de deportes de contacto en Trigueros. Nuestra asociación, de carácter deportivo y cultural, está especializada en <span className="font-semibold">Kick Boxing</span> y <span className="font-semibold">Jiujitsu Brasileño</span>, ofreciendo un entorno inclusivo donde el respeto, la superación y el compañerismo son valores fundamentales.
             </p>
             <p className="text-lg text-gray-700 leading-relaxed">
-              Nuestro objetivo es fomentar valores como la perseverancia, el autocontrol y la confianza, elementos fundamentales tanto dentro como fuera del tatami.
+              Impulsamos el desarrollo personal y deportivo de nuestros socios a través de una metodología adaptada a todas las edades y niveles, fomentando la disciplina, la confianza y el bienestar físico y mental.
             </p>
-            
+            <p className="text-lg text-gray-700 leading-relaxed">
+              Organizamos actividades, seminarios y eventos que enriquecen la vida cultural y deportiva de la localidad, contribuyendo a la difusión de las artes marciales y los deportes de contacto.
+            </p>
             <div className="grid grid-cols-2 gap-4 mt-8">
               <div className="bg-white p-4 rounded-lg shadow-md text-center">
                 <h3 className="text-xl font-bold text-gold mb-2">Experiencia</h3>
@@ -43,8 +45,8 @@ const About: React.FC = () => {
           
           <div className="relative">
             <img 
-              src="https://images.pexels.com/photos/8611964/pexels-photo-8611964.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
-              alt="Entrenamiento en ADECAM TRIGUEROS" 
+              src="/src/uploads/foto1.jpg" 
+              alt="Kick boxing en ADECAM TRIGUEROS" 
               className="w-full h-auto rounded-lg shadow-xl"
             />
             <div className="absolute -bottom-6 -left-6 bg-gold text-white p-6 rounded-lg shadow-lg">

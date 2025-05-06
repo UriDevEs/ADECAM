@@ -23,7 +23,7 @@ const Instructors: React.FC = () => {
     },
     {
       id: 2,
-      name: 'Raúl García',
+      name: 'Raúl',
       role: 'Instructor de Kick Boxing',
       bio: 'Apasionado del Kick Boxing con más de 10 años de experiencia en la enseñanza y la competición. Especialista en motivar y guiar a alumnos de todos los niveles.',
       image: 'https://images.pexels.com/photos/7991574/pexels-photo-7991574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
@@ -31,11 +31,17 @@ const Instructors: React.FC = () => {
     },
     {
       id: 3,
-      name: 'Rafa López',
+      name: 'Rafael García Aquiles',
       role: 'Instructor de Kick Boxing',
-      bio: 'Entrenador dedicado y entusiasta, especializado en la formación de grupos y clases personalizadas. Fomenta el respeto, la disciplina y el trabajo en equipo.',
+      bio: 'Entrenador con una destacada trayectoria en el Kick Boxing y Full Contact, reconocido por su dedicación y logros deportivos a nivel provincial, autonómico y nacional.',
       image: 'https://images.pexels.com/photos/7991528/pexels-photo-7991528.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      achievements: ['Subcampeón regional', 'Certificado en entrenamiento funcional', 'Participación en eventos nacionales']
+      achievements: [
+        '4 veces campeón de Córdoba consecutivos',
+        '2 campeonatos de Andalucía',
+        'Subcampeón de España',
+        'Cinturón negro segundo dan de Full Contact',
+        'Cinturón negro primer dan de Kick Boxing'
+      ]
     }
   ];
 
@@ -66,7 +72,7 @@ const Instructors: React.FC = () => {
                 <p className="text-gold font-semibold mb-4">{instructor.role}</p>
                 <p className="text-gray-700 mb-4">{instructor.bio}</p>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">Logros:</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">{instructor.name === 'Rafael García Aquiles' ? 'Currículum deportivo:' : 'Logros:'}</h4>
                   <ul className="space-y-1">
                     {instructor.achievements.map((achievement, index) => (
                       <li key={index} className="flex items-start text-gray-700">

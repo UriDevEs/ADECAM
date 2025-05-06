@@ -27,32 +27,6 @@ const Classes: React.FC = () => {
         'Mejora de la flexibilidad',
         'Aumento de la resistencia'
       ]
-    },
-    {
-      id: 3,
-      title: 'Kick Boxing Kids',
-      description: 'Programa especialmente diseñado para niños donde aprenden técnicas básicas de Kick Boxing en un ambiente divertido y seguro, fomentando valores como el respeto y la disciplina.',
-      level: 'Infantil (6-12 años)',
-      image: 'https://images.pexels.com/photos/8611930/pexels-photo-8611930.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      benefits: [
-        'Desarrollo de habilidades sociales',
-        'Fomento de la disciplina y respeto',
-        'Mejora de la coordinación',
-        'Aumento de la confianza'
-      ]
-    },
-    {
-      id: 4,
-      title: 'Preparación Física',
-      description: 'Entrenamiento funcional enfocado en mejorar la condición física general necesaria para la práctica de artes marciales y deportes de combate.',
-      level: 'Todos los niveles',
-      image: 'https://images.pexels.com/photos/4164761/pexels-photo-4164761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      benefits: [
-        'Aumento de fuerza y resistencia',
-        'Mejora de la movilidad',
-        'Prevención de lesiones',
-        'Optimización del rendimiento'
-      ]
     }
   ];
 
@@ -105,7 +79,7 @@ const Classes: React.FC = () => {
         
         <div className="text-center mt-12">
           <a 
-            href="#schedule" 
+            href="/schedule" 
             className="inline-block bg-gold hover:bg-gold-dark text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105"
           >
             Ver Horarios
