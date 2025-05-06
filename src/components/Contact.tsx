@@ -2,6 +2,17 @@ import React from 'react';
 import { Phone, Mail, MapPin, Clock, Facebook, Instagram, Youtube } from 'lucide-react';
 
 const Contact: React.FC = () => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const name = (form.elements.namedItem('name') as HTMLInputElement)?.value || '';
+    const email = (form.elements.namedItem('email') as HTMLInputElement)?.value || '';
+    const subject = (form.elements.namedItem('subject') as HTMLInputElement)?.value || '';
+    const message = (form.elements.namedItem('message') as HTMLTextAreaElement)?.value || '';
+    const text = `Hola, soy ${name} (${email}). Asunto: ${subject}. Mensaje: ${message}`;
+    const url = `https://wa.me/34635585328?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+  };
   return (
     <section id="contact" className="py-20 bg-white">
       <div className="container mx-auto px-4">
@@ -94,7 +105,7 @@ const Contact: React.FC = () => {
           {/* Contact form */}
           <div className="bg-white rounded-lg shadow-lg p-8 border border-gold">
             <h3 className="text-2xl font-bold text-gold mb-6">Envíanos un Mensaje</h3>
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-black mb-1">
