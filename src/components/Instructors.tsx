@@ -4,6 +4,24 @@ const Instructors: React.FC = () => {
   const instructors = [
     {
       id: 1,
+      name: 'Rafael García Aquiles',
+      role: 'Instructor de Kick Boxing',
+      bio: 'Entrenador con una destacada trayectoria en el Kick Boxing y Full Contact, reconocido por su dedicación y logros deportivos a nivel provincial, autonómico y nacional.',
+      image: 'src/uploads/close-up-boxer-bandaging-hands.webp',
+      achievements: [
+        '4 veces campeón de Córdoba consecutivos',
+        '2 campeonatos de Andalucía',
+        'Campeón de España',
+        'Subcampeón de España',
+        'Cinturón negro segundo dan de Full Contact',
+        'Cinturón negro primer dan de Kick Boxing',
+        'Conocimientos en defensa personal',
+        'Conocimientos en MMA y Muay Thai',
+        'Conocimientos en GRAPPLING'
+      ]
+    },
+    {
+      id: 2,
       name: 'Jesús Pérez Pérez',
       role: 'Instructor Principal de Jiujitsu y Presidente Five Elements Jiu-Jitsu Huelva',
       bio: 'Presidente del gimnasio Five Elements Jiu-Jitsu Huelva y también profesor. En 2004 creamos nuestro club de Jiu-Jitsu en Huelva y actualmente contamos con casi 200 socios entre niños y adultos.',
@@ -22,27 +40,13 @@ const Instructors: React.FC = () => {
       ]
     },
     {
-      id: 2,
+      id: 3,
       name: 'Raúl',
       role: 'Instructor de Kick Boxing',
       bio: 'Apasionado del Kick Boxing con más de 10 años de experiencia en la enseñanza y la competición. Especialista en motivar y guiar a alumnos de todos los niveles.',
-      image: 'https://images.pexels.com/photos/7991574/pexels-photo-7991574.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      image: 'src/uploads/close-up-boxer-bandaging-hands.webp',
       achievements: ['Campeón provincial de Kick Boxing', 'Certificación nacional de entrenador', 'Experiencia internacional en seminarios']
     },
-    {
-      id: 3,
-      name: 'Rafael García Aquiles',
-      role: 'Instructor de Kick Boxing',
-      bio: 'Entrenador con una destacada trayectoria en el Kick Boxing y Full Contact, reconocido por su dedicación y logros deportivos a nivel provincial, autonómico y nacional.',
-      image: 'https://images.pexels.com/photos/7991528/pexels-photo-7991528.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      achievements: [
-        '4 veces campeón de Córdoba consecutivos',
-        '2 campeonatos de Andalucía',
-        'Subcampeón de España',
-        'Cinturón negro segundo dan de Full Contact',
-        'Cinturón negro primer dan de Kick Boxing'
-      ]
-    }
   ];
 
   return (
