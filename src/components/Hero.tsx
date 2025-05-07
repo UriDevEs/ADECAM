@@ -24,6 +24,8 @@ const Hero: React.FC = () => {
         </picture>
       </div>
       
+      <video className="absolute inset-0 w-full h-full object-cover z-0" src="/src/uploads/videohero.mp4" autoPlay loop muted></video>
+      <div className="absolute inset-0 bg-black opacity-60 z-0"></div>
       <div className="container mx-auto px-4 z-10 text-center">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight lg:mt-8">
