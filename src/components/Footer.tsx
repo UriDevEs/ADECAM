@@ -14,7 +14,11 @@ const Footer: React.FC = () => {
             <p className="text-gray-400 mb-4">
             ASOCIACION CULTURAL DE DEPORTES DE CONTACTO Y ARTES MARCIALES TRIGUEROS.
             </p>
-            <img src="/src/uploads/logo-blanco.png" alt="ADECAM Logo" className="mx-auto mt-4 h-16 md:h-20 lg:h-24 object-contain" />
+            <div className="flex justify-center items-center gap-4 mt-4">
+              <img src="/src/uploads/fakm-logo.png" alt="FAKM Logo" className="h-16 md:h-20 lg:h-24 object-contain" />
+              <img src="/src/uploads/logo-blanco.png" alt="Logo Blanco" className="h-16 md:h-20 lg:h-24 object-contain" />
+              <img src="/src/uploads/logo-five.png" alt="Logo Five" className="h-16 md:h-20 lg:h-24 object-contain" />
+            </div>
           </div>
           
           {/* Quick Links */}

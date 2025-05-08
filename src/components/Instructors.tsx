@@ -6,7 +6,7 @@ const Instructors: React.FC = () => {
       id: 1,
       name: 'Rafael García Quiles',
       role: 'Instructor de Kick Boxing',
-      bio: 'Entrenador con una destacada trayectoria en el Kick Boxing y Full Contact, reconocido por su dedicación y logros deportivos a nivel provincial, autonómico y nacional.',
+      bio: 'Instructor con una sólida trayectoria en artes marciales. Especialista en Kick Boxing y Full Contact con más de 15 años de experiencia. Reconocido por:',
       image: 'src/uploads/rafa.jpeg',
       achievements: [
         '4 veces campeón de Córdoba consecutivos',
@@ -28,7 +28,7 @@ const Instructors: React.FC = () => {
       id: 2,
       name: 'Jesús Pérez Pérez',
       role: 'Instructor Principal de Jiujitsu y Presidente Five Elements Jiu-Jitsu Huelva',
-      bio: 'Presidente del gimnasio Five Elements Jiu-Jitsu Huelva y también profesor. En 2004 creamos nuestro club de Jiu-Jitsu en Huelva y actualmente contamos con casi 200 socios entre niños y adultos.',
+      bio: 'Maestro certificado con más de 20 años en artes marciales. Cinturón negro en múltiples disciplinas y fundador de Five Elements Jiu-Jitsu. Destaca por:',
       image: 'src/uploads/jesus.jpg',
       achievements: [
         'Cinturón negro 3° Grado de Brazilian Jiu-Jitsu por la Federación Internacional de Jiu-Jitsu Brasileño (IBJJF)',
@@ -47,7 +47,7 @@ const Instructors: React.FC = () => {
       id: 3,
       name: 'Raúl Herrera Hidalgo',
       role: 'Instructor de Kick Boxing',
-      bio: 'Cinturón negro 1º Dan Tai jitsu. Cinturón negro 1º Dan Kick Boxing. Experto en técnicas de defensa personal. Campeón provincial de Kick Boxing. Experiencia en seminarios de defensa para fuerzas del estado.',
+      bio: 'Instructor especializado en defensa personal y técnicas de combate. Campeón provincial y formador de fuerzas de seguridad. Certificaciones en:',
       image: 'src/uploads/raul.png',
       achievements: [
         'Cinturón negro 1º Dan Tai jitsu',
@@ -86,7 +86,7 @@ const Instructors: React.FC = () => {
                 <p className="text-gold font-semibold mb-4">{instructor.role}</p>
                 <p className="text-gray-700 mb-4">{instructor.bio}</p>
                 <div>
-                  <h4 className="font-semibold text-gray-900 mb-2">{instructor.name === 'Rafael García Aquiles' ? 'Currículum deportivo:' : 'Logros:'}</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">Currículum deportivo:</h4>
                   <ul className="space-y-1">
                     {instructor.achievements.map((achievement, index) => (
                       <li key={index} className="flex items-start text-gray-700">
