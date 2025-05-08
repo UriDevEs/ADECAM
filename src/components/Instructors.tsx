@@ -4,10 +4,10 @@ const Instructors: React.FC = () => {
   const instructors = [
     {
       id: 1,
-      name: 'Rafael García Aquiles',
+      name: 'Rafael García Quiles',
       role: 'Instructor de Kick Boxing',
       bio: 'Entrenador con una destacada trayectoria en el Kick Boxing y Full Contact, reconocido por su dedicación y logros deportivos a nivel provincial, autonómico y nacional.',
-      image: 'src/uploads/close-up-boxer-bandaging-hands.webp',
+      image: 'src/uploads/rafa.jpeg',
       achievements: [
         '4 veces campeón de Córdoba consecutivos',
         '2 campeonatos de Andalucía',
@@ -17,7 +17,11 @@ const Instructors: React.FC = () => {
         'Cinturón negro primer dan de Kick Boxing',
         'Conocimientos en defensa personal',
         'Conocimientos en MMA y Muay Thai',
-        'Conocimientos en GRAPPLING'
+        'Conocimientos en GRAPPLING',
+        'Datos de Rafael García Quiles:',
+        'Alumno de: José Luis Campos (5º dan taekwondo y full contact)',
+        'Alumno de: Ángel Casado (actual seleccionador nacional de la federación española de kick boxing)',
+        'Alumno de: Rafael Lozano (Balita Lozano) medallista olímpico boxeo'
       ]
     },
     {
@@ -41,11 +45,17 @@ const Instructors: React.FC = () => {
     },
     {
       id: 3,
-      name: 'Raúl',
+      name: 'Raúl Herrera Hidalgo',
       role: 'Instructor de Kick Boxing',
-      bio: 'Apasionado del Kick Boxing con más de 10 años de experiencia en la enseñanza y la competición. Especialista en motivar y guiar a alumnos de todos los niveles.',
-      image: 'src/uploads/close-up-boxer-bandaging-hands.webp',
-      achievements: ['Campeón provincial de Kick Boxing', 'Certificación nacional de entrenador', 'Experiencia internacional en seminarios']
+      bio: 'Cinturón negro 1º Dan Tai jitsu. Cinturón negro 1º Dan Kick Boxing. Experto en técnicas de defensa personal. Campeón provincial de Kick Boxing. Experiencia en seminarios de defensa para fuerzas del estado.',
+      image: 'src/uploads/raul.png',
+      achievements: [
+        'Cinturón negro 1º Dan Tai jitsu',
+        'Cinturón negro 1º Dan Kick Boxing',
+        'Experto en técnicas de defensa personal',
+        'Campeón provincial de Kick Boxing',
+        'Experiencia en seminarios de defensa para fuerzas del estado'
+      ]
     },
   ];
 
@@ -68,7 +78,7 @@ const Instructors: React.FC = () => {
                   src={instructor.image} 
                   alt={instructor.name} 
                   className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
-                  style={instructor.name === 'Jesús Pérez Pérez' ? { objectPosition: 'top' } : {}}
+                  style={instructor.name === 'Rafael García Quiles' || instructor.name === 'Jesús Pérez Pérez' ? { objectPosition: 'top' } : {}}
                 />
               </div>
               <div className="p-6">

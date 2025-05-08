@@ -113,7 +113,7 @@ const Schedule: React.FC = () => {
             * Los horarios pueden estar sujetos a cambios en días festivos.
           </p>
           <a 
-            href="#contact" 
+            href="/contact" 
             className="inline-block bg-gold hover:bg-gold-dark text-white font-bold py-3 px-8 rounded-lg transition-all duration-300 transform hover:scale-105"
           >
             Reserva tu clase de prueba

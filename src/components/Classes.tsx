@@ -20,7 +20,7 @@ const Classes: React.FC = () => {
       title: 'Jiujitsu Brasileño',
       description: 'Arte marcial y deporte de combate centrado en la lucha cuerpo a cuerpo y el control en el suelo. Aprende técnicas de sumisión y defensa personal efectiva.',
       level: 'Todos los niveles',
-      image: 'https://images.pexels.com/photos/8612001/pexels-photo-8612001.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
+      image: 'src/uploads/jiujitsu.jpg',
       benefits: [
         'Defensa personal efectiva',
         'Desarrollo de fuerza funcional',

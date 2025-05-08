@@ -4,40 +4,10 @@ import { X } from 'lucide-react';
 const Gallery: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
-  const images = [
-    {
-      src: 'https://images.pexels.com/photos/7561022/pexels-photo-7561022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      alt: 'Entrenamiento de Jiujitsu en ADECAM TRIGUEROS'
-    },
-    {
-      src: 'https://images.pexels.com/photos/7045452/pexels-photo-7045452.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      alt: 'Entrenamiento de Kick Boxing en ADECAM TRIGUEROS'
-    },
-    {
-      src: 'https://images.pexels.com/photos/8611982/pexels-photo-8611982.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      alt: 'Sparring de Jiujitsu en ADECAM TRIGUEROS'
-    },
-    {
-      src: 'https://images.pexels.com/photos/6765029/pexels-photo-6765029.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      alt: 'Técnicas de Kick Boxing en ADECAM TRIGUEROS'
-    },
-    {
-      src: 'https://images.pexels.com/photos/6295881/pexels-photo-6295881.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      alt: 'Clase infantil en ADECAM TRIGUEROS'
-    },
-    {
-      src: 'https://images.pexels.com/photos/8024363/pexels-photo-8024363.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      alt: 'Entrenamiento de preparación física en ADECAM TRIGUEROS'
-    },
-    {
-      src: 'https://images.pexels.com/photos/6765047/pexels-photo-6765047.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      alt: 'Competición de Jiujitsu con atletas de ADECAM TRIGUEROS'
-    },
-    {
-      src: 'https://images.pexels.com/photos/7991629/pexels-photo-7991629.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1',
-      alt: 'Competición de Kick Boxing con atletas de ADECAM TRIGUEROS'
-    }
-  ];
+  const images = Array.from({ length: 31 }, (_, i) => ({
+    src: `src/uploads/galery/${i + 1}.jpeg`,
+    alt: `Foto de la galería número ${i + 1} en ADECAM TRIGUEROS`
+  }));
 
   const openModal = (src: string) => {
     setSelectedImage(src);
