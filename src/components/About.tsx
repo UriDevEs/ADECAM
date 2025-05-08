@@ -45,9 +45,9 @@ const About: React.FC = () => {
           
           <div className="relative">
             <img 
-              src="/src/uploads/foto1.jpg" 
+              src="/src/uploads/galery/23.jpeg" 
               alt="Kick boxing en ADECAM TRIGUEROS" 
-              className="w-full h-auto rounded-lg shadow-xl"
+              className="w-full max-w-xs md:max-w-sm lg:max-w-md h-auto rounded-lg shadow-xl object-cover mx-auto"
             />
             <div className="absolute -bottom-6 -left-6 bg-gold text-white p-6 rounded-lg shadow-lg">
               <p className="text-2xl font-bold">+10</p>
