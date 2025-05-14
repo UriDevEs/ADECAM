@@ -2,7 +2,7 @@ import React from 'react';
 
 const Hero: React.FC = () => {
   return (
-    <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden">
+    <section id="home" className="relative h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-24">
       {/* Imagen de fondo sin efecto preloader */}
       <div 
         className="absolute inset-0 bg-black bg-cover bg-center bg-no-repeat z-0"
@@ -51,12 +51,6 @@ const Hero: React.FC = () => {
             >
               Horario
             </a>
-          </div>
-          <div className="flex flex-row justify-center items-center gap-8 mt-8">
-            <img src="/src/uploads/fakm-logo.png" alt="FAKM Logo" className="h-16 md:h-20 lg:h-24 object-contain" />
-            <img src="/src/uploads/logo-blanco.png" alt="Logo Blanco" className="h-16 md:h-20 lg:h-24 object-contain" />
-            <img src="/src/uploads/logo-five.png" alt="Logo Five" className="h-16 md:h-20 lg:h-24 object-contain" />
-            
           </div>
         </div>
       </div>

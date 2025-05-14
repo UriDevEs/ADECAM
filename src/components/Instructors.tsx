@@ -6,7 +6,7 @@ const Instructors: React.FC = () => {
       id: 1,
       name: 'Rafael García Quiles',
       role: 'Instructor de Kick Boxing',
-      bio: 'Instructor con una sólida trayectoria en artes marciales. Especialista en Kick Boxing y Full Contact con más de 15 años de experiencia. Reconocido por:',
+      bio: 'Instructor con una sólida trayectoria en artes marciales. Especialista en Kick Boxing y Full Contact. Reconocido por:',
       image: 'src/uploads/rafa.jpeg',
       achievements: [
         '4 veces campeón de Córdoba consecutivos',
@@ -28,7 +28,7 @@ const Instructors: React.FC = () => {
       id: 2,
       name: 'Jesús Pérez Pérez',
       role: 'Instructor Principal de Jiujitsu y Presidente Five Elements Jiu-Jitsu Huelva',
-      bio: 'Maestro certificado con más de 20 años en artes marciales. Cinturón negro en múltiples disciplinas y fundador de Five Elements Jiu-Jitsu. Destaca por:',
+      bio: 'Maestro certificado. Cinturón negro en múltiples disciplinas y fundador de Five Elements Jiu-Jitsu. Destaca por:',
       image: 'src/uploads/jesus.jpg',
       achievements: [
         'Cinturón negro 3° Grado de Brazilian Jiu-Jitsu por la Federación Internacional de Jiu-Jitsu Brasileño (IBJJF)',

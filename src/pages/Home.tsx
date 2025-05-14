@@ -1,11 +1,13 @@
 import React from 'react';
 import Hero from '../components/Hero';
+import SummarySection from '../components/SummarySection';
 
 const Home: React.FC = () => {
   return (
-    <div>
+    <main>
       <Hero />
-    </div>
+      <SummarySection />
+    </main>
   );
 };
 

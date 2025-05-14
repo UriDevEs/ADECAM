@@ -73,13 +73,8 @@ const Footer: React.FC = () => {
         
         <div className="mt-12 pt-8 border-t border-gray-800 text-center">
           <p className="text-gray-500">
-            &copy; {currentYear} ADECAM TRIGUEROS. Todos los derechos reservados.
+            &copy; {currentYear} Uridev. Todos los derechos reservados.
           </p>
-          <div className="mt-4 flex flex-col md:flex-row justify-center items-center gap-2 text-xs">
-            <Link to="/cookies" className="text-gray-400 hover:text-gold underline transition-colors duration-300 mr-2">Política de Cookies</Link>
-            <span className="hidden md:inline">|</span>
-            <Link to="/privacidad" className="text-gray-400 hover:text-gold underline transition-colors duration-300 ml-2">Política de Privacidad</Link>
-          </div>
         </div>
       </div>
     </footer>

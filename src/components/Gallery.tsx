@@ -4,7 +4,7 @@ import { X } from 'lucide-react';
 const Gallery: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   
-  const images = Array.from({ length: 31 }, (_, i) => ({
+  const images = Array.from({ length: 32 }, (_, i) => ({
     src: `src/uploads/galery/${i + 1}.jpeg`,
     alt: `Foto de la galería número ${i + 1} en ADECAM TRIGUEROS`
   }));
