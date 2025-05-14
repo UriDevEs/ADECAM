@@ -7,7 +7,7 @@ const Instructors: React.FC = () => {
       name: 'Rafael García Quiles',
       role: 'Instructor de Kick Boxing',
       bio: 'Instructor con una sólida trayectoria en artes marciales. Especialista en Kick Boxing y Full Contact. Reconocido por:',
-      image: 'src/uploads/rafa.jpeg',
+      image: 'src/uploads/rafa.jpg',
       achievements: [
         '4 veces campeón de Córdoba consecutivos',
         '2 campeonatos de Andalucía',
