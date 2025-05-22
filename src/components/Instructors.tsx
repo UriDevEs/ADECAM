@@ -48,7 +48,7 @@ const Instructors: React.FC = () => {
       name: 'Raúl Herrera Hidalgo',
       role: 'Instructor de Kick Boxing',
       bio: 'Instructor especializado en defensa personal y técnicas de combate. Campeón provincial y formador de fuerzas de seguridad. Certificaciones en:',
-      image: 'src/uploads/raul.png',
+      image: 'src/uploads/raul.jpeg',
       achievements: [
         'Cinturón negro 1º Dan Tai jitsu',
         'Cinturón negro 1º Dan Kick Boxing',
@@ -78,7 +78,7 @@ const Instructors: React.FC = () => {
                   src={instructor.image} 
                   alt={instructor.name} 
                   className="w-full h-full object-cover object-center transition-transform duration-500 hover:scale-110"
-                  style={instructor.name === 'Rafael García Quiles' || instructor.name === 'Jesús Pérez Pérez' ? { objectPosition: 'top' } : {}}
+                  style={['Rafael García Quiles', 'Jesús Pérez Pérez', 'Raúl Herrera Hidalgo'].includes(instructor.name) ? { objectPosition: 'top' } : {}}
                 />
               </div>
               <div className="p-6">

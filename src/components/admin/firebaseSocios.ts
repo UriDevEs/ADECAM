@@ -6,10 +6,12 @@ const db = getFirestore(app);
 export interface Socio {
   id?: string;
   nombre: string;
-  email: string;
+  apellidos?: string;
   telefono: string;
-  fechaAlta: string;
-  jiujitsu: boolean;
+  fechaNacimiento?: string;
+  email?: string;
+  fechaAlta?: string;
+  jiujitsu?: boolean;
   pagos: Pago[];
 }
 

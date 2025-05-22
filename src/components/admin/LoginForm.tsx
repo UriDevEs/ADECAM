@@ -27,7 +27,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onLoginSuccess }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto">
+    <form onSubmit={handleSubmit} className="bg-white p-8 rounded-lg shadow-lg max-w-md mx-auto pt-32">
       <h2 className="text-2xl font-bold mb-6 text-center">Acceso Administrador</h2>
       <div className="mb-4">
         <label className="block mb-2 text-sm font-medium">Email</label>

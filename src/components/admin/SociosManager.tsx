@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { Socio, obtenerSocios, agregarSocio, actualizarSocio, eliminarSocio } from "./firebaseSocios";
+import { UserPlus, Trash2, Edit2, X } from "lucide-react";
 
 const SociosManager: React.FC = () => {
   const [socios, setSocios] = useState<Socio[]>([]);
-  const [nuevoSocio, setNuevoSocio] = useState<Omit<Socio, 'id' | 'pagos'>>({
+  const [nuevoSocio, setNuevoSocio] = useState<{ nombre: string; apellidos: string; telefono: string; fechaNacimiento: string }>({
     nombre: "",
-    email: "",
+    apellidos: "",
     telefono: "",
-    fechaAlta: new Date().toISOString().slice(0,10),
-    jiujitsu: false
+    fechaNacimiento: ""
   });
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [busqueda, setBusqueda] = useState("");
 
   useEffect(() => {
     cargarSocios();
@@ -64,40 +66,73 @@ const SociosManager: React.FC = () => {
   return (
     <section id="socios" className="my-12">
       <h2 className="text-2xl font-bold mb-4 text-gold">Gestión de Socios</h2>
-      <form onSubmit={handleAgregar} className="bg-white rounded-lg shadow p-4 mb-8 flex flex-wrap gap-4 items-end">
-        <input name="nombre" value={nuevoSocio.nombre} onChange={handleChange} placeholder="Nombre" className="border p-2 rounded flex-1" required />
-        <input name="email" value={nuevoSocio.email} onChange={handleChange} placeholder="Email" className="border p-2 rounded flex-1" required type="email" />
-        <input name="telefono" value={nuevoSocio.telefono} onChange={handleChange} placeholder="Teléfono" className="border p-2 rounded flex-1" required />
-        <label className="flex items-center gap-2">
-          <input type="checkbox" name="jiujitsu" checked={nuevoSocio.jiujitsu} onChange={handleChange} /> Jiujitsu
-        </label>
-        <button type="submit" className="btn-corporativo bg-gold text-black px-6 py-2 rounded">Agregar</button>
-      </form>
+      <div className="flex flex-wrap gap-4 items-end mb-8">
+        <button onClick={() => setShowModal(true)} className="bg-gold text-black font-bold px-6 py-2 rounded shadow hover:bg-black hover:text-gold transition-all flex items-center gap-2"><UserPlus size={18}/>Agregar Socio</button>
+        <input
+          type="text"
+          placeholder="Buscar socio..."
+          value={busqueda}
+          onChange={e => setBusqueda(e.target.value)}
+          className="border p-2 rounded flex-1 min-w-[200px]"
+        />
+      </div>
+      {showModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
+          <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md relative animate-fade-in">
+            <button onClick={() => setShowModal(false)} className="absolute top-3 right-3 text-gray-400 hover:text-black"><X size={22}/></button>
+            <h3 className="text-xl font-bold mb-4 text-gold">Nuevo Socio</h3>
+            <form onSubmit={async e => {
+              e.preventDefault();
+              setCargando(true);
+              setError("");
+              try {
+                const socioData = { ...nuevoSocio, pagos: [{ concepto: "Inscripción", cantidad: 25, fecha: new Date().toISOString().slice(0,10) }] };
+                await agregarSocio(socioData);
+                setNuevoSocio({ nombre: "", apellidos: "", telefono: "", fechaNacimiento: "" });
+                setShowModal(false);
+                cargarSocios();
+              } catch (e) {
+                setError("Error al agregar socio");
+              }
+              setCargando(false);
+            }} className="space-y-4">
+              <input name="nombre" value={nuevoSocio.nombre} onChange={e => setNuevoSocio(prev => ({ ...prev, nombre: e.target.value }))} placeholder="Nombre" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
+              <input name="apellidos" value={nuevoSocio.apellidos} onChange={e => setNuevoSocio(prev => ({ ...prev, apellidos: e.target.value }))} placeholder="Apellidos" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
+              <input name="telefono" value={nuevoSocio.telefono} onChange={e => setNuevoSocio(prev => ({ ...prev, telefono: e.target.value }))} placeholder="Teléfono" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
+              <input name="fechaNacimiento" type="date" value={nuevoSocio.fechaNacimiento} onChange={e => setNuevoSocio(prev => ({ ...prev, fechaNacimiento: e.target.value }))} placeholder="Fecha de nacimiento" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
+              <button type="submit" className="w-full bg-gold hover:bg-black text-black hover:text-gold font-bold py-3 rounded transition-all duration-300 border border-gold hover:border-black flex items-center justify-center gap-2">Guardar <UserPlus size={16}/></button>
+            </form>
+            {error && <p className="text-red-500 mt-2">{error}</p>}
+          </div>
+        </div>
+      )}
       {cargando && <p>Cargando...</p>}
       {error && <p className="text-red-500">{error}</p>}
       <div className="overflow-x-auto">
-        <table className="min-w-full bg-white rounded shadow">
+        <table className="min-w-full bg-white rounded-xl shadow overflow-hidden">
           <thead>
-            <tr className="bg-gold text-black">
-              <th className="p-2">Nombre</th>
-              <th className="p-2">Email</th>
-              <th className="p-2">Teléfono</th>
-              <th className="p-2">Fecha Alta</th>
-              <th className="p-2">Jiujitsu</th>
-              <th className="p-2">Acciones</th>
+            <tr className="bg-gradient-to-r from-gold to-yellow-300 text-black">
+              <th className="p-3 font-semibold">Nombre</th>
+              <th className="p-3 font-semibold">Apellidos</th>
+              <th className="p-3 font-semibold">Teléfono</th>
+              <th className="p-3 font-semibold">Fecha de Nacimiento</th>
+              <th className="p-3 font-semibold">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            {socios.map(socio => (
-              <tr key={socio.id} className="border-b">
-                <td className="p-2">{socio.nombre}</td>
-                <td className="p-2">{socio.email}</td>
-                <td className="p-2">{socio.telefono}</td>
-                <td className="p-2">{socio.fechaAlta}</td>
-                <td className="p-2">{socio.jiujitsu ? "Sí" : "No"}</td>
-                <td className="p-2">
-                  {/* Aquí se puede añadir funcionalidad de editar en el futuro */}
-                  <button onClick={() => handleEliminar(socio.id!)} className="text-red-600 hover:underline">Eliminar</button>
+            {socios.filter(socio =>
+              socio.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+              socio.apellidos?.toLowerCase().includes(busqueda.toLowerCase()) ||
+              socio.telefono?.toLowerCase().includes(busqueda.toLowerCase())
+            ).map(socio => (
+              <tr key={socio.id} className="border-b hover:bg-gold/10 transition-colors">
+                <td className="p-3">{socio.nombre}</td>
+                <td className="p-3">{socio.apellidos}</td>
+                <td className="p-3">{socio.telefono}</td>
+                <td className="p-3">{socio.fechaNacimiento}</td>
+                <td className="p-3 flex gap-2">
+                  <button disabled className="text-gray-400 cursor-not-allowed"><Edit2 size={18}/></button>
+                  <button onClick={() => handleEliminar(socio.id!)} className="text-red-600 hover:bg-red-100 rounded-full p-2 transition-colors" title="Eliminar"><Trash2 size={18}/></button>
                 </td>
               </tr>
             ))}

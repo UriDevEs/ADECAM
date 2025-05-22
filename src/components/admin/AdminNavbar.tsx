@@ -27,6 +27,19 @@ const AdminNavbar: React.FC = () => {
                 <span className={`absolute bottom-0 left-0 w-full h-0.5 bg-gold transform transition-transform duration-300 ${location.pathname === link.href ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'}`}></span>
               </a>
             ))}
+            <button
+              onClick={() => {
+                import("firebase/auth").then(({ getAuth, signOut }) => {
+                  const auth = getAuth();
+                  signOut(auth).then(() => {
+                    window.location.href = "/";
+                  });
+                });
+              }}
+              className="ml-4 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors duration-300"
+            >
+              Cerrar sesión
+            </button>
           </div>
         </div>
       </div>
