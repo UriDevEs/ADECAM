@@ -5,13 +5,12 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 const SummarySection: React.FC = () => {
-  const galleryImages = [
-    'src/uploads/galery/23.jpeg',
-    'src/uploads/galery/1.jpeg',
-    'src/uploads/galery/11.jpeg',
-    'src/uploads/galery/3.jpeg'
+  // Obtener los archivos de la galería igual que en Gallery.tsx
+  const imageFiles = [
+    "1.jpeg","10.jpeg","11.jpeg","12.jpeg","13.jpeg","14.jpeg","15.jpeg","16.jpeg","17.jpeg","18.jpeg","19.jpeg","2.jpeg","20.jpeg","21.jpeg","22.jpeg","23.jpeg","24.jpeg","25.jpeg","26.jpeg","27.jpeg","28.jpeg","29.jpeg","3.jpeg","30.jpeg","31.jpeg","32.jpeg","4.jpeg","5.jpeg","6.jpeg","7.jpeg","8.jpeg","9.jpeg","WhatsApp Image 2025-05-12 at 22.38.25.jpeg","WhatsApp Image 2025-05-13 at 22.27.34.jpeg","WhatsApp Image 2025-05-15 at 07.25.23.jpeg","WhatsApp Image 2025-05-15 at 23.04.38.jpeg"
   ];
-
+  // Tomar las 4 imágenes más recientes
+  const galleryImages = imageFiles.slice().reverse().slice(0, 4).map((file) => `src/uploads/galery/${file}`);
   const ArrowPrev = (props: any) => (
     <button 
       {...props}
