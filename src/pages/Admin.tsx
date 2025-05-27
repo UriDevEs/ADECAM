@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import LoginForm from "../components/admin/LoginForm";
 import AdminNavbar from "../components/admin/AdminNavbar";
+import FichaSocio from "../components/admin/FichaSocio";
+import { Routes, Route } from "react-router-dom";
 
 const Admin: React.FC = () => {
   const [user, setUser] = useState<any>(null);
@@ -44,7 +46,6 @@ const Admin: React.FC = () => {
               <a href="#pagos" className="btn-corporativo border-2 border-gold text-gold hover:bg-gold hover:text-white px-8 py-3 text-center rounded-lg">Pagos y Deudas</a>
             </div>
           </div>
-          <SociosManager />
         </div>
       </section>
     </>

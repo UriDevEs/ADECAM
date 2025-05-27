@@ -1,6 +1,8 @@
 import React from "react";
 import AdminNavbar from "../components/admin/AdminNavbar";
 import SociosManager from "../components/admin/SociosManager";
+import FichaSocio from "../components/admin/FichaSocio";
+import { Routes, Route } from "react-router-dom";
 
 const Socios: React.FC = () => {
   return (
@@ -13,7 +15,10 @@ const Socios: React.FC = () => {
             <p className="text-lg text-gray-700 mb-6 text-center">
               Desde aquí puedes gestionar los socios de la asociación.
             </p>
-            <SociosManager />
+            <Routes>
+              <Route path="" element={<SociosManager />} />
+              <Route path=":id" element={<FichaSocio />} />
+            </Routes>
           </div>
         </div>
       </section>

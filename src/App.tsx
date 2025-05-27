@@ -41,7 +41,7 @@ function App() {
             <Route path="/condiciones" element={<Condiciones />} />
             <Route path="/admin/login" element={<LoginForm onLoginSuccess={() => window.location.replace('/admin')} />} />
             <Route path="/admin" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-            <Route path="/admin/socios" element={<ProtectedRoute><Socios /></ProtectedRoute>} />
+            <Route path="/admin/socios/*" element={<ProtectedRoute><Socios /></ProtectedRoute>} />
             <Route path="/admin/registros" element={<ProtectedRoute><Registros /></ProtectedRoute>} />
           </Routes>
         </main>

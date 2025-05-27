@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Socio, obtenerSocios, agregarSocio, actualizarSocio, eliminarSocio } from "./firebaseSocios";
 import { UserPlus, Trash2, Edit2, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const SociosManager: React.FC = () => {
   const [socios, setSocios] = useState<Socio[]>([]);
@@ -14,6 +15,8 @@ const SociosManager: React.FC = () => {
   const [error, setError] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [busqueda, setBusqueda] = useState("");
+  const navigate = useNavigate();
+  const [tipoSocio, setTipoSocio] = useState<'adulto' | 'niño'>('adulto');
 
   useEffect(() => {
     cargarSocios();
@@ -86,9 +89,11 @@ const SociosManager: React.FC = () => {
               setCargando(true);
               setError("");
               try {
-                const socioData = { ...nuevoSocio, pagos: [{ concepto: "Inscripción", cantidad: 25, fecha: new Date().toISOString().slice(0,10) }] };
+                const inscripcion = tipoSocio === 'adulto' ? 25 : 20;
+                const socioData = { ...nuevoSocio, tipo: tipoSocio, pagos: [{ concepto: "Inscripción", cantidad: inscripcion, fecha: new Date().toISOString().slice(0,10) }] };
                 await agregarSocio(socioData);
                 setNuevoSocio({ nombre: "", apellidos: "", telefono: "", fechaNacimiento: "" });
+                setTipoSocio('adulto');
                 setShowModal(false);
                 cargarSocios();
               } catch (e) {
@@ -100,6 +105,13 @@ const SociosManager: React.FC = () => {
               <input name="apellidos" value={nuevoSocio.apellidos} onChange={e => setNuevoSocio(prev => ({ ...prev, apellidos: e.target.value }))} placeholder="Apellidos" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
               <input name="telefono" value={nuevoSocio.telefono} onChange={e => setNuevoSocio(prev => ({ ...prev, telefono: e.target.value }))} placeholder="Teléfono" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
               <input name="fechaNacimiento" type="date" value={nuevoSocio.fechaNacimiento} onChange={e => setNuevoSocio(prev => ({ ...prev, fechaNacimiento: e.target.value }))} placeholder="Fecha de nacimiento" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
+              <div className="flex gap-4 items-center">
+                <label className="font-semibold">Tipo de socio:</label>
+                <select value={tipoSocio} onChange={e => setTipoSocio(e.target.value as 'adulto' | 'niño')} className="border border-gold p-2 rounded">
+                  <option value="adulto">Adulto</option>
+                  <option value="niño">Niño</option>
+                </select>
+              </div>
               <button type="submit" className="w-full bg-gold hover:bg-black text-black hover:text-gold font-bold py-3 rounded transition-all duration-300 border border-gold hover:border-black flex items-center justify-center gap-2">Guardar <UserPlus size={16}/></button>
             </form>
             {error && <p className="text-red-500 mt-2">{error}</p>}
@@ -114,8 +126,8 @@ const SociosManager: React.FC = () => {
             <tr className="bg-gradient-to-r from-gold to-yellow-300 text-black">
               <th className="p-3 font-semibold">Nombre</th>
               <th className="p-3 font-semibold">Apellidos</th>
-              <th className="p-3 font-semibold">Teléfono</th>
-              <th className="p-3 font-semibold">Fecha de Nacimiento</th>
+              <th className="p-3 font-semibold">Estado Mensualidad</th>
+              <th className="p-3 font-semibold">Estado Jiu Jitsu</th>
               <th className="p-3 font-semibold">Acciones</th>
             </tr>
           </thead>
@@ -124,18 +136,27 @@ const SociosManager: React.FC = () => {
               socio.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
               socio.apellidos?.toLowerCase().includes(busqueda.toLowerCase()) ||
               socio.telefono?.toLowerCase().includes(busqueda.toLowerCase())
-            ).map(socio => (
-              <tr key={socio.id} className="border-b hover:bg-gold/10 transition-colors">
-                <td className="p-3">{socio.nombre}</td>
-                <td className="p-3">{socio.apellidos}</td>
-                <td className="p-3">{socio.telefono}</td>
-                <td className="p-3">{socio.fechaNacimiento}</td>
-                <td className="p-3 flex gap-2">
-                  <button disabled className="text-gray-400 cursor-not-allowed"><Edit2 size={18}/></button>
-                  <button onClick={() => handleEliminar(socio.id!)} className="text-red-600 hover:bg-red-100 rounded-full p-2 transition-colors" title="Eliminar"><Trash2 size={18}/></button>
-                </td>
-              </tr>
-            ))}
+            ).map(socio => {
+              const pagos = socio.pagos || [];
+              const pagadoMensualidad = pagos.some(p => p.concepto === 'Mensualidad' && p.pagado);
+              const pagadoJiuJitsu = pagos.some(p => p.concepto === 'Jiu Jitsu' && p.pagado);
+              return (
+                <tr key={socio.id} className="border-b hover:bg-gold/10 transition-colors">
+                  <td className="p-3">{socio.nombre}</td>
+                  <td className="p-3">{socio.apellidos}</td>
+                  <td className="p-3">
+                    <span className={`px-3 py-1 rounded text-white font-bold ${pagadoMensualidad ? 'bg-green-500' : 'bg-red-500'}`}>{pagadoMensualidad ? 'Al corriente' : 'Pendiente'}</span>
+                  </td>
+                  <td className="p-3">
+                    <span className={`px-3 py-1 rounded text-white font-bold ${pagadoJiuJitsu ? 'bg-green-500' : 'bg-red-500'}`}>{pagadoJiuJitsu ? 'Al corriente' : 'Pendiente'}</span>
+                  </td>
+                  <td className="p-3 flex gap-2">
+                    <button onClick={() => navigate(`/admin/socios/${socio.id}`)} className="text-blue-600 hover:bg-blue-100 rounded-full p-2 transition-colors" title="Editar"><Edit2 size={18}/></button>
+                    <button onClick={() => handleEliminar(socio.id!)} className="text-red-600 hover:bg-red-100 rounded-full p-2 transition-colors" title="Eliminar"><Trash2 size={18}/></button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
