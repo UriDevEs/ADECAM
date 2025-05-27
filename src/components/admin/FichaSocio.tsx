@@ -111,15 +111,15 @@ const FichaSocio: React.FC = () => {
       {error && <p className="text-red-500 mb-2">{error}</p>}
       <div className="space-y-2 mb-6">
         <label className="block font-semibold">Nombre:</label>
-        <input name="nombre" value={form.nombre || ""} onChange={handleChange} disabled={!editando} className="border p-2 rounded w-full" />
+        <input name="nombre" value={form.nombre || ""} onChange={handleChange} disabled={!editando} className={`border p-2 rounded w-full ${editando ? '' : 'bg-gray-100'}`} />
         <label className="block font-semibold">Apellidos:</label>
-        <input name="apellidos" value={form.apellidos || ""} onChange={handleChange} disabled={!editando} className="border p-2 rounded w-full" />
+        <input name="apellidos" value={form.apellidos || ""} onChange={handleChange} disabled={!editando} className={`border p-2 rounded w-full ${editando ? '' : 'bg-gray-100'}`} />
         <label className="block font-semibold">Teléfono:</label>
-        <input name="telefono" value={form.telefono || ""} onChange={handleChange} disabled={!editando} className="border p-2 rounded w-full" />
+        <input name="telefono" value={form.telefono || ""} onChange={handleChange} disabled={!editando} className={`border p-2 rounded w-full ${editando ? '' : 'bg-gray-100'}`} />
         <label className="block font-semibold">Fecha de nacimiento:</label>
-        <input name="fechaNacimiento" type="date" value={form.fechaNacimiento || ""} onChange={handleChange} disabled={!editando} className="border p-2 rounded w-full" />
+        <input name="fechaNacimiento" type="date" value={form.fechaNacimiento || ""} onChange={handleChange} disabled={!editando} className={`border p-2 rounded w-full ${editando ? '' : 'bg-gray-100'}`} />
         <label className="block font-semibold">Tipo de socio:</label>
-        <select name="tipo" value={form.tipo || "adulto"} onChange={handleChange} disabled={!editando} className="border p-2 rounded w-full">
+        <select name="tipo" value={form.tipo || "adulto"} onChange={handleChange} disabled={!editando} className={`border p-2 rounded w-full ${editando ? '' : 'bg-gray-100'}`}>
           <option value="adulto">Adulto</option>
           <option value="niño">Niño</option>
         </select>
@@ -160,14 +160,38 @@ const FichaSocio: React.FC = () => {
         </tbody>
       </table>
       <div className="mb-4">
-        <span className="font-semibold">Estado actual:</span>
+        <span className="font-semibold">Estado actual por mes:</span>
         <ul className="list-disc ml-6">
-          <li>
-            Mensualidad: {pagos.some(p => p.concepto === "Mensualidad" && p.pagado && p.fecha.slice(0,7) === new Date().toISOString().slice(0,7)) ? <span className="text-green-600 font-bold">Al corriente</span> : <span className="text-red-600 font-bold">Deuda</span>}
-          </li>
-          <li>
-            Jiu Jitsu: {pagos.some(p => p.concepto === "Jiu Jitsu" && p.pagado && p.fecha.slice(0,7) === new Date().toISOString().slice(0,7)) ? <span className="text-green-600 font-bold">Al corriente</span> : <span className="text-red-600 font-bold">Deuda</span>}
-          </li>
+          {(() => {
+            // Determinar el mes y año de inscripción
+            const fechaAlta = socio?.fechaAlta || pagos.find(p => p.concepto === "Inscripción")?.fecha;
+            let startYear = new Date().getFullYear();
+            let startMonth = 1;
+            if (fechaAlta) {
+              const [y, m] = fechaAlta.slice(0,7).split("-");
+              startYear = parseInt(y);
+              startMonth = parseInt(m);
+            }
+            const months = [];
+            const now = new Date();
+            let y = startYear, m = startMonth;
+            // Solo mostrar meses desde la inscripción hasta el mes actual
+            while (y < now.getFullYear() || (y === now.getFullYear() && m <= now.getMonth() + 1)) {
+              months.push({ year: y, month: m });
+              m++;
+              if (m > 12) { m = 1; y++; }
+            }
+            return months.map(({ year, month }) => {
+              const ym = `${year}-${month.toString().padStart(2, '0')}`;
+              const mensualidadPagada = pagos.some(p => p.concepto === "Mensualidad" && p.pagado && p.fecha.slice(0,7) === ym);
+              const jiuPagada = pagos.some(p => p.concepto === "Jiu Jitsu" && p.pagado && p.fecha.slice(0,7) === ym);
+              return (
+                <li key={ym}>
+                  <span className="font-bold">{ym}:</span> Mensualidad: {mensualidadPagada ? <span className="text-green-600 font-bold">Al corriente</span> : <span className="text-red-600 font-bold">Deuda</span>} | Jiu Jitsu: {jiuPagada ? <span className="text-green-600 font-bold">Al corriente</span> : <span className="text-red-600 font-bold">Deuda</span>}
+                </li>
+              );
+            });
+          })()}
         </ul>
       </div>
       <form onSubmit={e => { e.preventDefault(); handleAgregarPago(); }} className="flex gap-2 items-end">

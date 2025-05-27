@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Socio, obtenerSocios, agregarSocio, actualizarSocio, eliminarSocio } from "./firebaseSocios";
+import { Socio, obtenerSocios, agregarSocio, actualizarSocio, eliminarSocio, agregarPagoSeparado, obtenerPagosPorSocio } from "./firebaseSocios";
 import { UserPlus, Trash2, Edit2, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,6 +17,7 @@ const SociosManager: React.FC = () => {
   const [busqueda, setBusqueda] = useState("");
   const navigate = useNavigate();
   const [tipoSocio, setTipoSocio] = useState<'adulto' | 'niño'>('adulto');
+  const [pagosPorSocio, setPagosPorSocio] = useState<{ [key: string]: any[] }>({});
 
   useEffect(() => {
     cargarSocios();
@@ -27,6 +28,12 @@ const SociosManager: React.FC = () => {
     try {
       const lista = await obtenerSocios();
       setSocios(lista);
+      // Cargar pagos separados para cada socio
+      const pagosObj: { [key: string]: any[] } = {};
+      await Promise.all(lista.map(async socio => {
+        pagosObj[socio.id!] = await obtenerPagosPorSocio(socio.id!);
+      }));
+      setPagosPorSocio(pagosObj);
     } catch (e) {
       setError("Error al cargar socios");
     }
@@ -90,21 +97,28 @@ const SociosManager: React.FC = () => {
               setError("");
               try {
                 const inscripcion = tipoSocio === 'adulto' ? 25 : 20;
-                const socioData = { ...nuevoSocio, tipo: tipoSocio, pagos: [{ concepto: "Inscripción", cantidad: inscripcion, fecha: new Date().toISOString().slice(0,10) }] };
-                await agregarSocio(socioData);
+                const socioData = { ...nuevoSocio, tipo: tipoSocio, pagos: [] };
+                const socioId = await agregarSocio(socioData);
+                await agregarPagoSeparado({
+                  socioId,
+                  fecha: new Date().toISOString().slice(0, 10),
+                  concepto: "Inscripción",
+                  cantidad: inscripcion,
+                  pagado: false
+                });
                 setNuevoSocio({ nombre: "", apellidos: "", telefono: "", fechaNacimiento: "" });
                 setTipoSocio('adulto');
                 setShowModal(false);
                 cargarSocios();
               } catch (e) {
-                setError("Error al agregar socio");
+                setError("Error al agregar socio: " + (e?.message || e));
               }
               setCargando(false);
             }} className="space-y-4">
+              <input name="fechaNacimiento" type="date" value={nuevoSocio.fechaNacimiento} onChange={e => setNuevoSocio(prev => ({ ...prev, fechaNacimiento: e.target.value }))} placeholder="Fecha de nacimiento" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
               <input name="nombre" value={nuevoSocio.nombre} onChange={e => setNuevoSocio(prev => ({ ...prev, nombre: e.target.value }))} placeholder="Nombre" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
               <input name="apellidos" value={nuevoSocio.apellidos} onChange={e => setNuevoSocio(prev => ({ ...prev, apellidos: e.target.value }))} placeholder="Apellidos" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
               <input name="telefono" value={nuevoSocio.telefono} onChange={e => setNuevoSocio(prev => ({ ...prev, telefono: e.target.value }))} placeholder="Teléfono" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
-              <input name="fechaNacimiento" type="date" value={nuevoSocio.fechaNacimiento} onChange={e => setNuevoSocio(prev => ({ ...prev, fechaNacimiento: e.target.value }))} placeholder="Fecha de nacimiento" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
               <div className="flex gap-4 items-center">
                 <label className="font-semibold">Tipo de socio:</label>
                 <select value={tipoSocio} onChange={e => setTipoSocio(e.target.value as 'adulto' | 'niño')} className="border border-gold p-2 rounded">
@@ -137,18 +151,50 @@ const SociosManager: React.FC = () => {
               socio.apellidos?.toLowerCase().includes(busqueda.toLowerCase()) ||
               socio.telefono?.toLowerCase().includes(busqueda.toLowerCase())
             ).map(socio => {
-              const pagos = socio.pagos || [];
-              const pagadoMensualidad = pagos.some(p => p.concepto === 'Mensualidad' && p.pagado);
-              const pagadoJiuJitsu = pagos.some(p => p.concepto === 'Jiu Jitsu' && p.pagado);
+              const pagos = pagosPorSocio[socio.id!] || [];
+              // Determinar fecha de inscripción
+              const fechaAlta = socio.fechaAlta || pagos.find(p => p.concepto === "Inscripción")?.fecha;
+              let startYear = new Date().getFullYear();
+              let startMonth = 1;
+              if (fechaAlta) {
+                const [y, m] = fechaAlta.slice(0,7).split("-");
+                startYear = parseInt(y);
+                startMonth = parseInt(m);
+              }
+              const now = new Date();
+              const currentYM = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}`;
+              let y = startYear, m = startMonth;
+              let deudaMensualidad = false;
+              let pagadoMensualidadMesActual = false;
+              while (y < now.getFullYear() || (y === now.getFullYear() && m <= now.getMonth() + 1)) {
+                const ym = `${y}-${m.toString().padStart(2, '0')}`;
+                const pagadoMensualidad = pagos.some(p => p.concepto === 'Mensualidad' && p.pagado && p.fecha.slice(0,7) === ym);
+                if (ym === currentYM) pagadoMensualidadMesActual = pagadoMensualidad;
+                if (!pagadoMensualidad) { deudaMensualidad = true; }
+                m++;
+                if (m > 12) { m = 1; y++; }
+              }
+              // Jiu Jitsu: deuda si existe algún mes desde alta sin pago de Jiu Jitsu
+              y = startYear; m = startMonth;
+              let deudaJiu = false;
+              let pagadoJiuMesActual = false;
+              while (y < now.getFullYear() || (y === now.getFullYear() && m <= now.getMonth() + 1)) {
+                const ym = `${y}-${m.toString().padStart(2, '0')}`;
+                const pagadoJiu = pagos.some(p => p.concepto === 'Jiu Jitsu' && p.pagado && p.fecha.slice(0,7) === ym);
+                if (ym === currentYM) pagadoJiuMesActual = pagadoJiu;
+                if (!pagadoJiu) { deudaJiu = true; }
+                m++;
+                if (m > 12) { m = 1; y++; }
+              }
               return (
                 <tr key={socio.id} className="border-b hover:bg-gold/10 transition-colors">
                   <td className="p-3">{socio.nombre}</td>
                   <td className="p-3">{socio.apellidos}</td>
                   <td className="p-3">
-                    <span className={`px-3 py-1 rounded text-white font-bold ${pagadoMensualidad ? 'bg-green-500' : 'bg-red-500'}`}>{pagadoMensualidad ? 'Al corriente' : 'Pendiente'}</span>
+                    <span className={`px-3 py-1 rounded text-white font-bold ${(deudaMensualidad || !pagadoMensualidadMesActual) ? 'bg-red-500' : 'bg-green-500'}`}>{(deudaMensualidad || !pagadoMensualidadMesActual) ? 'Impago/Deuda' : 'Al corriente'}</span>
                   </td>
                   <td className="p-3">
-                    <span className={`px-3 py-1 rounded text-white font-bold ${pagadoJiuJitsu ? 'bg-green-500' : 'bg-red-500'}`}>{pagadoJiuJitsu ? 'Al corriente' : 'Pendiente'}</span>
+                    <span className={`px-3 py-1 rounded text-white font-bold ${(deudaJiu || !pagadoJiuMesActual) ? 'bg-red-500' : 'bg-green-500'}`}>{(deudaJiu || !pagadoJiuMesActual) ? 'Impago/Deuda' : 'Al corriente'}</span>
                   </td>
                   <td className="p-3 flex gap-2">
                     <button onClick={() => navigate(`/admin/socios/${socio.id}`)} className="text-blue-600 hover:bg-blue-100 rounded-full p-2 transition-colors" title="Editar"><Edit2 size={18}/></button>
