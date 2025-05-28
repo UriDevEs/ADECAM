@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 
 const SociosManager: React.FC = () => {
   const [socios, setSocios] = useState<Socio[]>([]);
-  const [nuevoSocio, setNuevoSocio] = useState<{ nombre: string; apellidos: string; telefono: string; fechaNacimiento: string }>({
+  const [nuevoSocio, setNuevoSocio] = useState<{ nombre: string; apellidos: string; telefono: string; fechaRegistro: string }>({
     nombre: "",
     apellidos: "",
     telefono: "",
-    fechaNacimiento: ""
+    fechaRegistro: new Date().toISOString().slice(0,10)
   });
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
@@ -101,12 +101,12 @@ const SociosManager: React.FC = () => {
                 const socioId = await agregarSocio(socioData);
                 await agregarPagoSeparado({
                   socioId,
-                  fecha: new Date().toISOString().slice(0, 10),
+                  fecha: nuevoSocio.fechaRegistro,
                   concepto: "Inscripción",
                   cantidad: inscripcion,
                   pagado: false
                 });
-                setNuevoSocio({ nombre: "", apellidos: "", telefono: "", fechaNacimiento: "" });
+                setNuevoSocio({ nombre: "", apellidos: "", telefono: "", fechaRegistro: new Date().toISOString().slice(0,10) });
                 setTipoSocio('adulto');
                 setShowModal(false);
                 cargarSocios();
@@ -115,7 +115,7 @@ const SociosManager: React.FC = () => {
               }
               setCargando(false);
             }} className="space-y-4">
-              <input name="fechaNacimiento" type="date" value={nuevoSocio.fechaNacimiento} onChange={e => setNuevoSocio(prev => ({ ...prev, fechaNacimiento: e.target.value }))} placeholder="Fecha de nacimiento" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
+              <input name="fechaRegistro" type="date" value={nuevoSocio.fechaRegistro} onChange={e => setNuevoSocio(prev => ({ ...prev, fechaRegistro: e.target.value }))} placeholder="Fecha de registro" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
               <input name="nombre" value={nuevoSocio.nombre} onChange={e => setNuevoSocio(prev => ({ ...prev, nombre: e.target.value }))} placeholder="Nombre" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
               <input name="apellidos" value={nuevoSocio.apellidos} onChange={e => setNuevoSocio(prev => ({ ...prev, apellidos: e.target.value }))} placeholder="Apellidos" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />
               <input name="telefono" value={nuevoSocio.telefono} onChange={e => setNuevoSocio(prev => ({ ...prev, telefono: e.target.value }))} placeholder="Teléfono" className="border border-gold p-3 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold" required />

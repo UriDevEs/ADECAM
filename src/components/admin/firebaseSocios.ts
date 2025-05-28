@@ -71,3 +71,30 @@ export async function actualizarPagoSeparado(id: string, datos: Partial<PagoSepa
 export async function eliminarPagoSeparado(id: string) {
   await deleteDoc(doc(db, "pagos", id));
 }
+
+// --- GASTOS DE ASOCIACIÓN ---
+export interface Gasto {
+  id?: string;
+  fecha: string;
+  concepto: string;
+  cantidad: number;
+  descripcion?: string;
+}
+
+export async function agregarGasto(gasto: Omit<Gasto, 'id'>) {
+  const docRef = await addDoc(collection(db, "gastos"), gasto);
+  return docRef.id;
+}
+
+export async function obtenerGastos(): Promise<Gasto[]> {
+  const querySnapshot = await getDocs(collection(db, "gastos"));
+  return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Gasto[];
+}
+
+export async function actualizarGasto(id: string, datos: Partial<Gasto>) {
+  await updateDoc(doc(db, "gastos", id), datos);
+}
+
+export async function eliminarGasto(id: string) {
+  await deleteDoc(doc(db, "gastos", id));
+}

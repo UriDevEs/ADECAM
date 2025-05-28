@@ -133,7 +133,7 @@ const FichaSocio: React.FC = () => {
         <button onClick={handleEliminar} className="bg-red-500 text-white font-bold px-6 py-2 rounded shadow flex items-center gap-2"><Trash2 size={18}/>Eliminar</button>
       </div>
       <h3 className="text-xl font-bold mb-2 text-gold">Registros de Pagos</h3>
-      <table className="min-w-full bg-white rounded shadow mb-4">
+      <table className="min-w-full bg-white rounded shadow mb-4 text-sm md:text-base">
         <thead>
           <tr className="bg-gradient-to-r from-gold to-yellow-300 text-black">
             <th className="p-2">Tipo</th>
@@ -145,12 +145,12 @@ const FichaSocio: React.FC = () => {
         </thead>
         <tbody>
           {pagos.map(pago => (
-            <tr key={pago.id} className="border-b">
+            <tr key={pago.id} className="border-b hover:bg-gold/10 transition-colors">
               <td className="p-2">{pago.concepto}</td>
               <td className="p-2">{pago.fecha ? pago.fecha.slice(0,7) : ""}</td>
               <td className="p-2">{pago.cantidad} €</td>
               <td className="p-2">
-                <input type="checkbox" checked={pago.pagado} onChange={e => handleActualizarPago(pago.id!, { pagado: e.target.checked })} />
+                <input type="checkbox" checked={pago.pagado} onChange={e => handleActualizarPago(pago.id!, { pagado: e.target.checked })} className="accent-gold scale-125" />
               </td>
               <td className="p-2">
                 <button onClick={() => handleEliminarPago(pago.id!)} className="text-red-600 hover:bg-red-100 rounded-full p-2 transition-colors" title="Eliminar"><Trash2 size={18}/></button>
@@ -194,16 +194,27 @@ const FichaSocio: React.FC = () => {
           })()}
         </ul>
       </div>
-      <form onSubmit={e => { e.preventDefault(); handleAgregarPago(); }} className="flex gap-2 items-end">
-        <input type="month" value={nuevoPago.fecha.slice(0,7)} onChange={e => setNuevoPago(prev => ({ ...prev, fecha: e.target.value+"-01" }))} className="border p-2 rounded" required />
-        <select value={nuevoPago.concepto} onChange={e => setNuevoPago(prev => ({ ...prev, concepto: e.target.value }))} className="border p-2 rounded" required>
-          <option value="">Selecciona concepto</option>
-          <option value="Mensualidad">Mensualidad</option>
-          <option value="Jiu Jitsu">Jiu Jitsu</option>
-        </select>
-        <input type="number" placeholder="Cantidad" value={nuevoPago.cantidad} onChange={e => setNuevoPago(prev => ({ ...prev, cantidad: Number(e.target.value) }))} className="border p-2 rounded" required />
-        <label className="flex items-center gap-1"><input type="checkbox" checked={nuevoPago.pagado} onChange={e => setNuevoPago(prev => ({ ...prev, pagado: e.target.checked }))} />Pagado</label>
-        <button type="submit" className="bg-gold text-black font-bold px-4 py-2 rounded flex items-center gap-1"><Plus size={16}/>Agregar</button>
+      <form onSubmit={e => { e.preventDefault(); handleAgregarPago(); }} className="flex flex-col md:flex-row gap-2 md:gap-4 items-stretch md:items-end bg-gold/10 p-4 rounded-lg shadow-inner transition-all">
+        <div className="flex-1">
+          <label className="block text-xs font-semibold mb-1 text-gold">Mes</label>
+          <input type="month" value={nuevoPago.fecha.slice(0,7)} onChange={e => setNuevoPago(prev => ({ ...prev, fecha: e.target.value+"-01" }))} className="border border-gold p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold bg-white" required />
+        </div>
+        <div className="flex-1">
+          <label className="block text-xs font-semibold mb-1 text-gold">Concepto</label>
+          <select value={nuevoPago.concepto} onChange={e => setNuevoPago(prev => ({ ...prev, concepto: e.target.value }))} className="border border-gold p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold bg-white" required>
+            <option value="">Selecciona concepto</option>
+            <option value="Mensualidad">Mensualidad</option>
+            <option value="Jiu Jitsu">Jiu Jitsu</option>
+          </select>
+        </div>
+        <div className="flex-1">
+          <label className="block text-xs font-semibold mb-1 text-gold">Cantidad (€)</label>
+          <input type="number" placeholder="Cantidad" value={nuevoPago.cantidad} onChange={e => setNuevoPago(prev => ({ ...prev, cantidad: Number(e.target.value) }))} className="border border-gold p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold bg-white" required />
+        </div>
+        <div className="flex items-center gap-2 md:mt-6">
+          <label className="flex items-center gap-1 text-xs font-semibold text-gold"><input type="checkbox" checked={nuevoPago.pagado} onChange={e => setNuevoPago(prev => ({ ...prev, pagado: e.target.checked }))} className="accent-gold scale-125" />Pagado</label>
+        </div>
+        <button type="submit" className="bg-gold hover:bg-black text-black hover:text-gold font-bold px-4 py-2 rounded transition-all duration-300 border border-gold hover:border-black flex items-center gap-1 md:mt-6"><Plus size={16}/>Agregar</button>
       </form>
     </div>
   );
