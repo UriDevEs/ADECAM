@@ -105,7 +105,7 @@ const FichaSocio: React.FC = () => {
   if (!socio) return <p>No se encontró el socio.</p>;
 
   return (
-    <div className="max-w-2xl mx-auto my-8 bg-white rounded-xl shadow p-8">
+    <div className="w-full max-w-full px-0 sm:px-4 bg-white rounded-lg shadow-lg p-8 max-w-3xl mx-auto">
       <button onClick={() => navigate("/admin/socios")} className="mb-4 flex items-center gap-2 text-gold hover:underline"><ArrowLeft size={18}/>Volver</button>
       <h2 className="text-2xl font-bold mb-4 text-gold">Ficha de Socio</h2>
       {error && <p className="text-red-500 mb-2">{error}</p>}
@@ -207,6 +207,7 @@ const FichaSocio: React.FC = () => {
             <option value="">Selecciona concepto</option>
             <option value="Mensualidad">Mensualidad</option>
             <option value="Jiu Jitsu">Jiu Jitsu</option>
+            <option value="Inscripción">Inscripción</option>
           </select>
         </div>
         <div className="flex-1">
@@ -214,7 +215,13 @@ const FichaSocio: React.FC = () => {
           <input type="number" placeholder="introducir cantidad" value={nuevoPago.cantidad} onChange={e => setNuevoPago(prev => ({ ...prev, cantidad: e.target.value === '' ? '' : Number(e.target.value) }))} className="border border-gold p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold bg-white" required />
         </div>
         <div className="flex items-center gap-2 md:mt-6">
-          <label className="flex items-center gap-1 text-xs font-semibold text-gold"><input type="checkbox" checked={nuevoPago.pagado} onChange={e => setNuevoPago(prev => ({ ...prev, pagado: e.target.checked }))} className="accent-gold scale-125" />Pagado</label>
+          <button
+            type="button"
+            className={`px-4 py-2 rounded font-semibold border transition-colors duration-200 ${nuevoPago.pagado ? 'bg-green-500 text-white border-green-600' : 'bg-gray-200 text-gray-700 border-gray-400'}`}
+            onClick={() => setNuevoPago(prev => ({ ...prev, pagado: !prev.pagado }))}
+          >
+            {nuevoPago.pagado ? 'Pagado' : 'No pagado'}
+          </button>
         </div>
         <button type="submit" className="bg-gold hover:bg-black text-black hover:text-gold font-bold px-4 py-2 rounded transition-all duration-300 border border-gold hover:border-black flex items-center gap-1 md:mt-6"><Plus size={16}/>Agregar</button>
       </form>

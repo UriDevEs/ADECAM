@@ -76,7 +76,7 @@ const SociosManager: React.FC = () => {
   };
 
   return (
-    <section id="socios" className="my-12">
+    <section id="socios" className="w-full max-w-full px-0 sm:px-4 bg-white rounded-lg shadow-lg p-8 max-w-3xl mx-auto my-12">
       <h2 className="text-2xl font-bold mb-4 text-gold">Gestión de Socios</h2>
       <div className="flex flex-wrap gap-4 items-end mb-8">
         <button onClick={() => setShowModal(true)} className="bg-gold text-black font-bold px-6 py-2 rounded shadow hover:bg-black hover:text-gold transition-all flex items-center gap-2"><UserPlus size={18}/>Agregar Socio</button>
@@ -97,6 +97,64 @@ const SociosManager: React.FC = () => {
           <option value="pagado">Solo Pagado</option>
           <option value="impagado">Solo Impagado</option>
         </select>
+      </div>
+      {/* Recuento de socios filtrados */}
+      <div className="mb-4 font-semibold text-gold">
+        {(() => {
+          let count = 0;
+          socios.filter(socio =>
+            socio.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+            socio.apellidos?.toLowerCase().includes(busqueda.toLowerCase()) ||
+            socio.telefono?.toLowerCase().includes(busqueda.toLowerCase())
+          ).map(socio => {
+            const pagos = pagosPorSocio[socio.id!] || [];
+            const fechaAlta = socio.fechaAlta || pagos.find(p => p.concepto === "Inscripción")?.fecha;
+            let startYear = new Date().getFullYear();
+            let startMonth = 1;
+            if (fechaAlta) {
+              const [y, m] = fechaAlta.slice(0,7).split("-");
+              startYear = parseInt(y);
+              startMonth = parseInt(m);
+            }
+            const now = new Date();
+            const currentYM = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2, '0')}`;
+            let y = startYear, m = startMonth;
+            let deudaMensualidad = false;
+            let pagadoMensualidadMesActual = false;
+            while (y < now.getFullYear() || (y === now.getFullYear() && m <= now.getMonth() + 1)) {
+              const ym = `${y}-${m.toString().padStart(2, '0')}`;
+              const pagadoMensualidad = pagos.some(p => p.concepto === 'Mensualidad' && p.pagado && p.fecha.slice(0,7) === ym);
+              if (ym === currentYM) pagadoMensualidadMesActual = pagadoMensualidad;
+              if (!pagadoMensualidad) { deudaMensualidad = true; }
+              m++;
+              if (m > 12) { m = 1; y++; }
+            }
+            y = startYear; m = startMonth;
+            let deudaJiu = false;
+            let pagadoJiuMesActual = false;
+            while (y < now.getFullYear() || (y === now.getFullYear() && m <= now.getMonth() + 1)) {
+              const ym = `${y}-${m.toString().padStart(2, '0')}`;
+              const pagadoJiu = pagos.some(p => p.concepto === 'Jiu Jitsu' && p.pagado && p.fecha.slice(0,7) === ym);
+              if (ym === currentYM) pagadoJiuMesActual = pagadoJiu;
+              if (!pagadoJiu) { deudaJiu = true; }
+              m++;
+              if (m > 12) { m = 1; y++; }
+            }
+            if (tipoFiltro === "mensualidad" && estadoFiltro !== "ambos") {
+              if (estadoFiltro === "pagado" && (deudaMensualidad || !pagadoMensualidadMesActual)) return null;
+              if (estadoFiltro === "impagado" && !(deudaMensualidad || !pagadoMensualidadMesActual)) return null;
+            } else if (tipoFiltro === "jiujitsu" && estadoFiltro !== "ambos") {
+              if (estadoFiltro === "pagado" && (deudaJiu || !pagadoJiuMesActual)) return null;
+              if (estadoFiltro === "impagado" && !(deudaJiu || !pagadoJiuMesActual)) return null;
+            } else if (tipoFiltro === "ambos" && estadoFiltro !== "ambos") {
+              if (estadoFiltro === "pagado" && ((deudaMensualidad || !pagadoMensualidadMesActual) || (deudaJiu || !pagadoJiuMesActual))) return null;
+              if (estadoFiltro === "impagado" && !((deudaMensualidad || !pagadoMensualidadMesActual) || (deudaJiu || !pagadoJiuMesActual))) return null;
+            }
+            count++;
+            return null;
+          });
+          return `Socios filtrados: ${count}`;
+        })()}
       </div>
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
@@ -198,11 +256,21 @@ const SociosManager: React.FC = () => {
                 if (m > 12) { m = 1; y++; }
               }
               // Filtro por tipo
-              if (tipoFiltro === "mensualidad" && deudaMensualidad === false && deudaJiu === true) return null;
-              if (tipoFiltro === "jiujitsu" && deudaJiu === false && deudaMensualidad === true) return null;
-              // Filtro por estado
-              if (estadoFiltro === "pagado" && ((tipoFiltro === "mensualidad" && (deudaMensualidad || !pagadoMensualidadMesActual)) || (tipoFiltro === "jiujitsu" && (deudaJiu || !pagadoJiuMesActual)) || (tipoFiltro === "ambos" && ((deudaMensualidad || !pagadoMensualidadMesActual) && (deudaJiu || !pagadoJiuMesActual))))) return null;
-              if (estadoFiltro === "impagado" && ((tipoFiltro === "mensualidad" && !(deudaMensualidad || !pagadoMensualidadMesActual)) || (tipoFiltro === "jiujitsu" && !(deudaJiu || !pagadoJiuMesActual)) || (tipoFiltro === "ambos" && !((deudaMensualidad || !pagadoMensualidadMesActual) || (deudaJiu || !pagadoJiuMesActual))))) return null;
+              if (tipoFiltro === "mensualidad" && estadoFiltro !== "ambos") {
+                if (estadoFiltro === "pagado" && (deudaMensualidad || !pagadoMensualidadMesActual)) return null;
+                if (estadoFiltro === "impagado" && !(deudaMensualidad || !pagadoMensualidadMesActual)) return null;
+              } else if (tipoFiltro === "jiujitsu" && estadoFiltro !== "ambos") {
+                if (estadoFiltro === "pagado" && (deudaJiu || !pagadoJiuMesActual)) return null;
+                if (estadoFiltro === "impagado" && !(deudaJiu || !pagadoJiuMesActual)) return null;
+              } else if (tipoFiltro === "ambos" && estadoFiltro !== "ambos") {
+                if (estadoFiltro === "pagado" && ((deudaMensualidad || !pagadoMensualidadMesActual) || (deudaJiu || !pagadoJiuMesActual))) return null;
+                if (estadoFiltro === "impagado" && !((deudaMensualidad || !pagadoMensualidadMesActual) || (deudaJiu || !pagadoJiuMesActual))) return null;
+              }
+              if (estadoFiltro === "impagado") {
+  if (tipoFiltro === "mensualidad" && !(deudaMensualidad || !pagadoMensualidadMesActual)) return null;
+  if (tipoFiltro === "jiujitsu" && (!deudaJiu && pagadoJiuMesActual)) return null;
+  if (tipoFiltro === "ambos" && (!((deudaMensualidad || !pagadoMensualidadMesActual) || (deudaJiu || !pagadoJiuMesActual)))) return null;
+}
               return (
                 <tr key={socio.id} className="border-b hover:bg-gold/10 transition-colors">
                   <td className="p-3">{socio.nombre}</td>
