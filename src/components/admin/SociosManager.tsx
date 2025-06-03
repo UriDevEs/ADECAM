@@ -18,6 +18,8 @@ const SociosManager: React.FC = () => {
   const navigate = useNavigate();
   const [tipoSocio, setTipoSocio] = useState<'adulto' | 'niño'>('adulto');
   const [pagosPorSocio, setPagosPorSocio] = useState<{ [key: string]: any[] }>({});
+  const [tipoFiltro, setTipoFiltro] = useState<string>("ambos");
+  const [estadoFiltro, setEstadoFiltro] = useState<string>("ambos");
 
   useEffect(() => {
     cargarSocios();
@@ -85,6 +87,16 @@ const SociosManager: React.FC = () => {
           onChange={e => setBusqueda(e.target.value)}
           className="border p-2 rounded flex-1 min-w-[200px]"
         />
+        <select value={tipoFiltro} onChange={e => setTipoFiltro(e.target.value)} className="border p-2 rounded">
+          <option value="ambos">Mensualidad y Jiu Jitsu</option>
+          <option value="mensualidad">Solo Mensualidad</option>
+          <option value="jiujitsu">Solo Jiu Jitsu</option>
+        </select>
+        <select value={estadoFiltro} onChange={e => setEstadoFiltro(e.target.value)} className="border p-2 rounded">
+          <option value="ambos">Pagado e Impagado</option>
+          <option value="pagado">Solo Pagado</option>
+          <option value="impagado">Solo Impagado</option>
+        </select>
       </div>
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">
@@ -96,7 +108,7 @@ const SociosManager: React.FC = () => {
               setCargando(true);
               setError("");
               try {
-                const inscripcion = tipoSocio === 'adulto' ? 25 : 20;
+                const inscripcion = tipoSocio === 'adulto' ? 20 : 15;
                 const socioData = { ...nuevoSocio, tipo: tipoSocio, pagos: [] };
                 const socioId = await agregarSocio(socioData);
                 await agregarPagoSeparado({
@@ -174,7 +186,6 @@ const SociosManager: React.FC = () => {
                 m++;
                 if (m > 12) { m = 1; y++; }
               }
-              // Jiu Jitsu: deuda si existe algún mes desde alta sin pago de Jiu Jitsu
               y = startYear; m = startMonth;
               let deudaJiu = false;
               let pagadoJiuMesActual = false;
@@ -186,6 +197,12 @@ const SociosManager: React.FC = () => {
                 m++;
                 if (m > 12) { m = 1; y++; }
               }
+              // Filtro por tipo
+              if (tipoFiltro === "mensualidad" && deudaMensualidad === false && deudaJiu === true) return null;
+              if (tipoFiltro === "jiujitsu" && deudaJiu === false && deudaMensualidad === true) return null;
+              // Filtro por estado
+              if (estadoFiltro === "pagado" && ((tipoFiltro === "mensualidad" && (deudaMensualidad || !pagadoMensualidadMesActual)) || (tipoFiltro === "jiujitsu" && (deudaJiu || !pagadoJiuMesActual)) || (tipoFiltro === "ambos" && ((deudaMensualidad || !pagadoMensualidadMesActual) && (deudaJiu || !pagadoJiuMesActual))))) return null;
+              if (estadoFiltro === "impagado" && ((tipoFiltro === "mensualidad" && !(deudaMensualidad || !pagadoMensualidadMesActual)) || (tipoFiltro === "jiujitsu" && !(deudaJiu || !pagadoJiuMesActual)) || (tipoFiltro === "ambos" && !((deudaMensualidad || !pagadoMensualidadMesActual) || (deudaJiu || !pagadoJiuMesActual))))) return null;
               return (
                 <tr key={socio.id} className="border-b hover:bg-gold/10 transition-colors">
                   <td className="p-3">{socio.nombre}</td>
@@ -202,7 +219,7 @@ const SociosManager: React.FC = () => {
                   </td>
                 </tr>
               );
-            })}
+            }).filter(Boolean)}
           </tbody>
         </table>
       </div>

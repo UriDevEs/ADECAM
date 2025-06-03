@@ -13,6 +13,9 @@ const Dashboard: React.FC = () => {
   const [jiuPagados, setJiuPagados] = useState(0);
   const [altas, setAltas] = useState(0);
   const [bajas, setBajas] = useState(0);
+  const [ingresos, setIngresos] = useState(0);
+  const [gastos, setGastos] = useState(0);
+  const [balance, setBalance] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,23 +27,22 @@ const Dashboard: React.FC = () => {
       // Fetch all pagos
       const pagosSnapshot = await getDocs(collection(db, "pagos"));
       const pagos = pagosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // Fetch all gastos
+      const gastosSnapshot = await getDocs(collection(db, "gastos"));
+      const gastosArr = gastosSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       // Get current month and year
       const now = new Date();
       const currentMonth = now.toISOString().slice(0,7);
       const currentYear = now.getFullYear();
-      // Monthly and annual totals
-      let mensualSum = 0;
-      let anualSum = 0;
+      // Monthly and annual totals (all paid incomes by date)
+      let mensualSum = pagos.filter(p => p.pagado && p.fecha && p.fecha.slice(0,7) === currentMonth).reduce((acc, p) => acc + (p.cantidad || 0), 0);
+      let anualSum = pagos.filter(p => p.pagado && p.fecha && p.fecha.slice(0,4) === String(currentYear)).reduce((acc, p) => acc + (p.cantidad || 0), 0);
       let deudaSocios = new Set();
       let jiuSocios = new Set();
+      let totalIngresos = pagos.filter(p => p.pagado).reduce((acc, p) => acc + (p.cantidad || 0), 0);
+      let totalGastos = gastosArr.reduce((acc, g) => acc + (g.cantidad || 0), 0);
       socios.forEach(socio => {
         const pagosSocio = pagos.filter(p => p.socioId === socio.id);
-        // Mensualidad pagada este mes
-        const mensualidadMes = pagosSocio.filter(p => p.concepto === "Mensualidad" && p.pagado && p.fecha.slice(0,7) === currentMonth);
-        mensualSum += mensualidadMes.reduce((acc, p) => acc + (p.cantidad || 0), 0);
-        // Mensualidad pagada este año
-        const mensualidadAnio = pagosSocio.filter(p => p.concepto === "Mensualidad" && p.pagado && p.fecha.slice(0,4) === String(currentYear));
-        anualSum += mensualidadAnio.reduce((acc, p) => acc + (p.cantidad || 0), 0);
         // Deuda: si falta algún mes desde alta hasta ahora sin pago
         let fechaAlta = socio.fechaAlta || pagosSocio.find(p => p.concepto === "Inscripción")?.fecha;
         let y = fechaAlta ? parseInt(fechaAlta.slice(0,4)) : currentYear;
@@ -62,6 +64,9 @@ const Dashboard: React.FC = () => {
       setAnual(anualSum);
       setDeudaCount(deudaSocios.size);
       setJiuPagados(jiuSocios.size);
+      setIngresos(totalIngresos);
+      setGastos(totalGastos);
+      setBalance(totalIngresos - totalGastos);
       setLoading(false);
     }
     fetchData();
@@ -86,6 +91,18 @@ const Dashboard: React.FC = () => {
               <div className="bg-gray-100 rounded p-4 text-center">
                 <h2 className="text-xl font-semibold mb-2">Contabilidad Anual</h2>
                 <span className="text-3xl font-bold text-blue-600">€{anual}</span>
+              </div>
+              <div className="bg-gray-100 rounded p-4 text-center">
+                <h2 className="text-xl font-semibold mb-2">Ingresos Totales</h2>
+                <span className="text-3xl font-bold text-green-700">€{ingresos}</span>
+              </div>
+              <div className="bg-gray-100 rounded p-4 text-center">
+                <h2 className="text-xl font-semibold mb-2">Gastos Totales</h2>
+                <span className="text-3xl font-bold text-red-600">€{gastos}</span>
+              </div>
+              <div className="bg-gray-100 rounded p-4 text-center md:col-span-2">
+                <h2 className="text-xl font-semibold mb-2">Balance</h2>
+                <span className="text-3xl font-bold text-purple-700">€{balance}</span>
               </div>
               <div className="bg-gray-100 rounded p-4 text-center">
                 <h2 className="text-xl font-semibold mb-2">Alertas de Deuda</h2>

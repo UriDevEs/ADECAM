@@ -10,7 +10,7 @@ const FichaSocio: React.FC = () => {
   const [pagos, setPagos] = useState<PagoSeparado[]>([]);
   const [editando, setEditando] = useState(false);
   const [form, setForm] = useState<any>({});
-  const [nuevoPago, setNuevoPago] = useState<{ fecha: string; concepto: string; cantidad: number; pagado: boolean }>({ fecha: "", concepto: "", cantidad: 0, pagado: false });
+  const [nuevoPago, setNuevoPago] = useState<{ fecha: string; concepto: string; cantidad: number | ""; pagado: boolean }>({ fecha: "", concepto: "", cantidad: "", pagado: false });
   const [cargando, setCargando] = useState(false);
   const [error, setError] = useState("");
 
@@ -133,32 +133,34 @@ const FichaSocio: React.FC = () => {
         <button onClick={handleEliminar} className="bg-red-500 text-white font-bold px-6 py-2 rounded shadow flex items-center gap-2"><Trash2 size={18}/>Eliminar</button>
       </div>
       <h3 className="text-xl font-bold mb-2 text-gold">Registros de Pagos</h3>
-      <table className="min-w-full bg-white rounded shadow mb-4 text-sm md:text-base">
+      <div className="overflow-x-auto">
+      <table className="min-w-full bg-white rounded shadow mb-4 text-xs md:text-base">
         <thead>
           <tr className="bg-gradient-to-r from-gold to-yellow-300 text-black">
-            <th className="p-2">Tipo</th>
-            <th className="p-2">Mes</th>
-            <th className="p-2">Cantidad</th>
-            <th className="p-2">Pagado</th>
-            <th className="p-2">Acciones</th>
+            <th className="p-2 whitespace-nowrap">Tipo</th>
+            <th className="p-2 whitespace-nowrap">Mes</th>
+            <th className="p-2 whitespace-nowrap">Cantidad</th>
+            <th className="p-2 whitespace-nowrap">Pagado</th>
+            <th className="p-2 whitespace-nowrap">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {pagos.map(pago => (
             <tr key={pago.id} className="border-b hover:bg-gold/10 transition-colors">
-              <td className="p-2">{pago.concepto}</td>
-              <td className="p-2">{pago.fecha ? pago.fecha.slice(0,7) : ""}</td>
-              <td className="p-2">{pago.cantidad} €</td>
-              <td className="p-2">
+              <td className="p-2 whitespace-nowrap">{pago.concepto}</td>
+              <td className="p-2 whitespace-nowrap">{pago.fecha ? pago.fecha.slice(0,7) : ""}</td>
+              <td className="p-2 whitespace-nowrap">{pago.cantidad} €</td>
+              <td className="p-2 whitespace-nowrap">
                 <input type="checkbox" checked={pago.pagado} onChange={e => handleActualizarPago(pago.id!, { pagado: e.target.checked })} className="accent-gold scale-125" />
               </td>
-              <td className="p-2">
+              <td className="p-2 whitespace-nowrap">
                 <button onClick={() => handleEliminarPago(pago.id!)} className="text-red-600 hover:bg-red-100 rounded-full p-2 transition-colors" title="Eliminar"><Trash2 size={18}/></button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      </div>
       <div className="mb-4">
         <span className="font-semibold">Estado actual por mes:</span>
         <ul className="list-disc ml-6">
@@ -209,7 +211,7 @@ const FichaSocio: React.FC = () => {
         </div>
         <div className="flex-1">
           <label className="block text-xs font-semibold mb-1 text-gold">Cantidad (€)</label>
-          <input type="number" placeholder="Cantidad" value={nuevoPago.cantidad} onChange={e => setNuevoPago(prev => ({ ...prev, cantidad: Number(e.target.value) }))} className="border border-gold p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold bg-white" required />
+          <input type="number" placeholder="introducir cantidad" value={nuevoPago.cantidad} onChange={e => setNuevoPago(prev => ({ ...prev, cantidad: e.target.value === '' ? '' : Number(e.target.value) }))} className="border border-gold p-2 rounded w-full focus:outline-none focus:ring-2 focus:ring-gold bg-white" required />
         </div>
         <div className="flex items-center gap-2 md:mt-6">
           <label className="flex items-center gap-1 text-xs font-semibold text-gold"><input type="checkbox" checked={nuevoPago.pagado} onChange={e => setNuevoPago(prev => ({ ...prev, pagado: e.target.checked }))} className="accent-gold scale-125" />Pagado</label>
