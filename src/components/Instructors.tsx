@@ -6,7 +6,7 @@ const Instructors: React.FC = () => {
       id: 1,
       name: 'Rafael García Quiles',
       role: 'Instructor de Kick Boxing',
-      bio: 'Instructor con una sólida trayectoria en artes marciales y más de 30 años de experiencia. Especialista en Kick Boxing y Full Contact. Reconocido por:',
+      bio: 'Instructor con una sólida trayectoria en artes marciales.Amplia experiencia en tecnicas de enseñanza avanzada y de competicion .Amplia experiencia en competicion tanto Amateur como Neo-profesional.Especialista en Kick Boxing y Full Contact. Reconocido por:',
       image: 'src/uploads/rafa.jpg',
       achievements: [
         '4 veces Campeón de Córdoba consecutivos en menos 67kg y menos 71 kg de Full Contact Años 2004, 2005, 2006 y 2007  por la AAMK ( Amater y Neo )',
@@ -22,21 +22,17 @@ const Instructors: React.FC = () => {
         'Conocimientos en Brazilian Jiu Jitsu',
         'Profesores hasta 2025:',
         'Alumno de: José Luis Campos  5º Dan de Taekwondo y 5º Dan de Full contact',
+
         'Alumno de Angel casado:',
         'CN 8 GRADO KICKBOXING',
         'CN 5 GRADO TAEKWONDO',
-        'CINTURON NEGRO DE HAPKIDO',
-        'ENTRENADOR NACIONAL TAEKWONDO',
-        'CAMPEON DE ESPAÑA, DE EUROPA PROFESIONAL Y DEL MUNDO DE KICKBOXING',
-        'CAMPEON DE ESPAÑA, PREOLIMPICO, INTERNACIONAL Y SUBCAMPEON DEL MUNDO DE TAEKWONDO',
-        'MEDALLA DE BRONCE Y DE PLATA AL MÉRITO DE LA FED ESPAÑOLA DE TAEKWONDO',
-        'MEDALLA AL MERITO DE LA FED ANDALUZA DE KICKBOXING',
-        'INSIGNIA OLPIMPICA COMITÉ OLIMPICO ESPAÑOL',
-        'TROFEO A UNA VIDA DEDICADA AL DEPORTE “DIARIO CORDOBA”',
-        'MEDALLA AL MERITO DEL CONCILIO DE MAESTROS',
-        'EX-DIRECTOR DE FORMACION DE LA FEDERACION ESPAÑOLA DE KICKBOXING',
-        'DIRECTOR COMITÉ NACIONAL DE GRADOS FEDERACION ESPAÑOLA DE KICKBOXING Y MUAYTHAI',
-        'PRESIDENTE FEDERACION ANDALUZA DE KICKBOXING Y MUAY THAI 2005-2020'
+        'Alumno de Jesus Perez Perez',
+        'Cinturón negro 3° Grado de Brazilian Jiu-Jitsu por la Federación Internacional de Jiu-Jitsu Brasileño (IBJJF)',
+        'Cinturón negro 1º Dan de Kick Boxing por la Federación Española de Kick Boxing',
+        'Cinturón negro 1º Dan de Lucha Sambo por la Federación Española de Luchas Olímpicas y Deportes Asociados',
+        'Alumno de Rafael Lozano Muñoz',
+        'Participó en tres Juegos Olímpicos de Verano, obteniendo medalla de plata en Sídney 2000, bronce en Atlanta 1996 y 5º lugar en Barcelona 1992 en peso minimosca',
+        'Ganó una medalla de bronce en el Campeonato Europeo de Boxeo Aficionado de 1996' 
       ]
     },
     {
@@ -66,7 +62,7 @@ const Instructors: React.FC = () => {
       image: 'src/uploads/raul.jpeg',
       achievements: [
         'Cinturón negro 1º DAN Nihon Tai Jitsu por la Federación Española de Judo y Deportes Asociados inscrita en el CSD, con más de diez años de experiencia',
-        'Cinturón negro 1º DAN Kick Boxing por la FAKM',
+        'Cinturón negro 1º DAN Kick Boxing',
         'Certificación en Curso de Defensa Personal y Técnicas de Detención.',
         'Conocimientos de Boxeo.',
         'Conocimientos y practicante de Muay Thai, con más de dos años de experiencia en esa modalidad, siendo alumno de Oscar Toro Gamero, luchador profesional en Muay Thai.',

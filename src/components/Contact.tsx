@@ -36,7 +36,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div className="ml-4">
                   <h4 className="text-lg font-semibold text-black">Ubicación</h4>
-                  <p className="text-black">Calle Carpinteros 29</p>
+                  <p className="text-black">Calle Carpinteros 19</p>
                 </div>
               </div>
               
@@ -61,7 +61,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div className="ml-4">
                   <h4 className="text-lg font-semibold text-black">Email</h4>
-                  <p className="text-black">info@adecamtrigueros.es</p>
+                  <p className="text-black">adecamtrigueroshuelva@gmail.com</p>
                 </div>
               </div>
               
@@ -71,7 +71,7 @@ const Contact: React.FC = () => {
                 </div>
                 <div className="ml-4">
                   <h4 className="text-lg font-semibold text-black">Horario de Atención</h4>
-                  <p className="text-black">Lunes a Viernes: 18:00 - 22:00</p>
+                  <p className="text-black">Lunes a Viernes: 18:30 - 22:00</p>
                 </div>
               </div>
             </div>
